@@ -1,8 +1,11 @@
 import { createYoga } from "graphql-yoga";
 import { createContext } from "@/servers/gql/context";
-import { schema }       from "../../../servers/gql/index";
+import { schema } from "../../../servers/gql/index";
+import type { NextRequest } from "next/server";
 
-const { handleRequest } = createYoga({
+const yoga = createYoga<{
+  req: NextRequest;
+}>({
   schema,
   graphqlEndpoint: "/api/graphql",
   fetchAPI: { Request, Response },
@@ -10,11 +13,18 @@ const { handleRequest } = createYoga({
     return await createContext(request);
   },
   cors: {
-    origin: process.env.NODE_ENV === 'production' 
-      ? [process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000']
-      : ['http://localhost:3000'],
+    origin:
+      process.env.NODE_ENV === "production"
+        ? [process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"]
+        : ["http://localhost:3000"],
     credentials: true,
   },
 });
 
-export { handleRequest as GET, handleRequest as POST };
+export async function GET(request: NextRequest) {
+  return yoga.handleRequest(request, { req: request });
+}
+
+export async function POST(request: NextRequest) {
+  return yoga.handleRequest(request, { req: request });
+}
