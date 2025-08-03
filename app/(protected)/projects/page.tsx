@@ -76,7 +76,6 @@ const Projects = () => {
     "JavaScript",
     "TypeScript",
     "Python",
-    // ... other tags (same as original)
   ];
 
   useEffect(() => {
@@ -119,8 +118,6 @@ const Projects = () => {
   // setLikedProjects(projects.filter((project:any)=>project.likes>0))
 
   console.log("projects-->", projects);
-  // console.log("my projects-->", myProjects);
-  // console.log("my projects-->", myProjects);
 
   // Filter projects based on active tab
   const getFilteredProjectsByTab = useMemo(() => {
@@ -155,13 +152,12 @@ const Projects = () => {
   }, [getFilteredProjectsByTab, searchTerm, filterTech]);
 
   const getTechColor = (tech: string) => {
-    const colors = {
+    const colors : { [key: string]: string } = {
       React: "bg-blue-100 text-blue-800 border-blue-200",
       "Vue.js": "bg-green-100 text-green-800 border-green-200",
       "Node.js": "bg-green-100 text-green-800 border-green-200",
       Python: "bg-yellow-100 text-yellow-800 border-yellow-200",
       JavaScript: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      // ... other colors (same as original)
     };
     return colors[tech] || "bg-gray-100 text-gray-800 border-gray-200";
   };
