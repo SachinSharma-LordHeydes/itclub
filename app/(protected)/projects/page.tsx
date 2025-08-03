@@ -29,8 +29,6 @@ const Projects = () => {
   const [filterTech, setFilterTech] = useState("all");
   const [activeTab, setActiveTab] = useState("all");
   const [likedProjects, setLikedProjects] = useState<string[]>([]);
-  const [starredProjects, setStarredProjects] = useState<string[]>([]);
-  const [myProjects, setMyProjects] = useState<string[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -109,7 +107,7 @@ const Projects = () => {
       { id: "liked", label: "Liked", count: likedProjects.length },
       { id: "add", label: "Add Project", icon: Plus, isAction: true },
     ],
-    [projects.length, myProjects.length, likedProjects.length]
+    [projects.length, likedProjects.length]
   );
 
   // Get all unique technologies
@@ -127,22 +125,14 @@ const Projects = () => {
   // Filter projects based on active tab
   const getFilteredProjectsByTab = useMemo(() => {
     switch (activeTab) {
-      case "my":
-        return projects.filter(
-          (project: any) => userId === project.user.clerkId
-        );
       case "liked":
         return projects.filter((project: any) =>
           likedProjects.includes(project.id)
         );
-      case "starred":
-        return projects.filter((project: any) =>
-          starredProjects.includes(project.id)
-        );
       default:
         return projects;
     }
-  }, [activeTab, projects, myProjects, likedProjects, starredProjects]);
+  }, [activeTab, projects, likedProjects]);
 
   // Apply search and technology filters
   const filteredProjects = useMemo(() => {

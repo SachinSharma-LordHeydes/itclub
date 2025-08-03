@@ -180,7 +180,7 @@ const UserDashboard = () => {
               </div>
             )}
           </div>
-          ){/* Quick Actions */}
+          {/* Quick Actions */}
           <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg p-6 text-white">
             <h2 className="text-lg font-semibold mb-4">Ready for more?</h2>
             <div className="space-y-3">
