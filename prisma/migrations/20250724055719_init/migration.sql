@@ -1,0 +1,12 @@
+-- AlterTable
+ALTER TABLE "polls" ALTER COLUMN "vote_count" DROP NOT NULL,
+ALTER COLUMN "status" SET DEFAULT 'OPEN';
+
+-- AlterTable
+ALTER TABLE "projects" ALTER COLUMN "tags" DROP NOT NULL,
+ALTER COLUMN "likes" DROP NOT NULL,
+ALTER COLUMN "likes" SET DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "resourses" ALTER COLUMN "downloads" DROP NOT NULL,
+ALTER COLUMN "rating" DROP NOT NULL;

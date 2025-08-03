@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PollStatus {
+  OPEN
+  CLOSE
+}
+
+enum Days {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+model User {
+  id         String     @id @default(cuid())
+  clerkId    String     @unique
+  email      String     @unique
+  first_name String?
+  role       Role       @default(USER)
+  createdAt  DateTime   @default(now())
+  events     Event[]    @relation("UserHostsEvent")
+  projects   Project[]  @relation("UserUploadsProject")
+  resources  Resource[] @relation("UserUploadsResources")
+  polls      Poll[]     @relation("AdminPostsPolls")
+  votes      Vote[]     @relation("UserVotes")
+  likes      Like[]     @relation("UserLikes")
+
+  @@index([email])
+  @@index([clerkId])
+  @@map("users")
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  host        User     @relation(name: "UserHostsEvent", fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  title       String
+  description String
+  type        String
+  guest       String?
+  location    String
+  time        DateTime
+  day         Days
+  tags        String[]
+  participant Int?
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@map("events")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  tags        String[]
+  likes       Int      @default(0)
+  user        User     @relation(name: "UserUploadsProject", fields: [userId], references: [id])
+  userId      String
+  githubLink  String
+  liveLink    String?
+  createdAt   DateTime @default(now())
+  likedBy     Like[]   @relation("ProjectLikes")
+
+  @@index([userId])
+  @@map("projects")
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation("UserLikes", fields: [userId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project  @relation("ProjectLikes", fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, projectId])
+  @@map("likes")
+}
+
+model Resource {
+  id            String   @id @default(cuid())
+  user          User     @relation(name: "UserUploadsResources", fields: [userId], references: [id])
+  userId        String
+  title         String
+  description   String
+  category      String
+  document_type String
+  resourceLink  String[]
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@map("resources")
+}
+
+model Poll {
+  id          String       @id @default(cuid())
+  user        User         @relation(name: "AdminPostsPolls", fields: [adminId], references: [id], onDelete: Cascade)
+  adminId     String
+  title       String
+  description String
+  vote_count  Int?
+  status      PollStatus   @default(OPEN)
+  expiresAt   DateTime
+  createdAt   DateTime     @default(now())
+  votes       Vote[]       @relation("PollVotes")
+  options     PollOption[] @relation("PoleOptions")
+
+  @@index([adminId])
+  @@map("polls")
+}
+
+model PollOption {
+  id     String @id @default(cuid())
+  text   String
+  poll   Poll   @relation(name: "PoleOptions", fields: [pollId], references: [id], onDelete: Cascade)
+  pollId String
+  votes  Vote[] @relation("OptionVotes")
+
+  @@map("poll_optionss")
+}
+
+model Vote {
+  id       String     @id @default(cuid())
+  poll     Poll       @relation(name: "PollVotes", fields: [pollId], references: [id], onDelete: Cascade)
+  pollId   String
+  user     User       @relation(name: "UserVotes", fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  option   PollOption @relation(name: "OptionVotes", fields: [optionId], references: [id])
+  optionId String
+
+  @@index([pollId])
+  @@index([userId])
+  @@map("votes")
+}
