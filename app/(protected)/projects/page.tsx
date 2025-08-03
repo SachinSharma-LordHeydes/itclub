@@ -372,7 +372,7 @@ const Projects = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <div className="flex items-center space-x-4">
+          {/* <div className="flex items-center space-x-4">
             <Filter className="h-5 w-5 text-gray-400" />
             <select
               value={filterTech}
@@ -380,13 +380,13 @@ const Projects = () => {
               className="border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[180px] bg-white hover:border-gray-300 transition-colors"
             >
               <option value="all">All Technologies</option>
-              {allTechnologies.map((tech) => (
-                <option key={tech} value={tech}>
+              {allTechnologies.map((tech,index) => (
+                <option key={index} value={tech}>
                   {tech}
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
         </div>
       </div>
 

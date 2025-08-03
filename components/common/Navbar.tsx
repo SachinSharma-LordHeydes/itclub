@@ -1,4 +1,6 @@
 "use client";
+import { GET_USER_ROLE } from "@/client/user/userQueries";
+import { useQuery } from "@apollo/client";
 import {
   SignedIn,
   SignedOut,
@@ -16,7 +18,19 @@ const Navbar: React.FC = () => {
   const pathname = usePathname();
   const { openUserProfile } = useClerk();
 
-  const userRole = "admin";
+  const {
+    data: userRoleData,
+    loading: userRoleLoading,
+    error: userRoleError,
+  } = useQuery(GET_USER_ROLE);
+
+  console.log("user role", userRoleData);
+
+  let userRole;
+
+  if (!userRoleLoading) {
+    userRole = userRoleData.getUser.role;
+  }
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navItems = [

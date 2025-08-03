@@ -16,3 +16,11 @@ export const GET_USER = gql`
     }
   }
 `;
+
+export const GET_USER_ROLE = gql`
+  query GetUser {
+    getUser {
+      role
+    }
+  }
+`;
