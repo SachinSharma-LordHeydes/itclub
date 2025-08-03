@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-interface Resource {
+type Resource = {
   id: string;
   title: string;
   description: string;
@@ -26,8 +26,11 @@ interface Resource {
     | "DevOps"
     | "Data Science"
     | "Database";
-  resourceLink?: string[];
-}
+  resourceLink: string[];
+  userName: string | null;
+  clerkId: string | null;
+  createdAt: string;
+};
 
 interface EditResourceModalProps {
   resource: Resource;
@@ -265,7 +268,7 @@ const EditResourceModal = ({
     };
     return typeMap[formData.type] || "";
   };
-console.log("form data-->",formData)
+  console.log("form data-->", formData);
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -371,8 +374,9 @@ console.log("form data-->",formData)
                     Current Files
                   </h3>
                   <div className="grid grid-cols-3 gap-4 max-h-60 overflow-y-auto">
-                    {formData.resourceLink 
-                      .map((url, index) => renderFilePreview(url, index, true))}
+                    {formData.resourceLink.map((url, index) =>
+                      renderFilePreview(url, index, true)
+                    )}
                   </div>
                 </div>
               )}

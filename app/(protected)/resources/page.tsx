@@ -25,7 +25,24 @@ type ResourceData = {
   type: string;
   category: string;
   description: string;
-  resourceLink: string;
+  resourceLink: string[];
+  userName: string | null;
+  clerkId: string | null;
+  createdAt: string;
+};
+
+type Resource = {
+  id: string;
+  title: string;
+  description: string;
+  type: "docs" | "videos" | "images" | "links";
+  category:
+    | "Programming"
+    | "Web Development"
+    | "DevOps"
+    | "Data Science"
+    | "Database";
+  resourceLink: string[];
   userName: string | null;
   clerkId: string | null;
   createdAt: string;
@@ -41,9 +58,8 @@ const ResourcesPage = () => {
   const [selectedResource, setSelectedResource] = useState<Resource | null>(
     null
   );
-  const [deleteResourceState, setDeleteResourceState] = useState<ResourceData | null>(
-    null
-  );
+  const [deleteResourceState, setDeleteResourceState] =
+    useState<ResourceData | null>(null);
 
   const [
     deleteResource,
@@ -115,19 +131,21 @@ const ResourcesPage = () => {
   ];
 
   const handleEdit = (resource: ResourceData) => {
-    // Map ResourceData to Resource interface
     const mappedResource: Resource = {
       id: resource.id,
       title: resource.title,
       description: resource.description,
-      type: resource.type as "docs" | "videos" | "images" | "links", // Adjust based on your mapping logic
+      type: resource.type as "docs" | "videos" | "images" | "links",
       category: resource.category as
         | "Programming"
         | "Web Development"
         | "DevOps"
         | "Data Science"
         | "Database",
-      resourceLink: resource.resourceLink ,
+      resourceLink: resource.resourceLink,
+      userName: resource.userName,
+      clerkId: resource.clerkId,
+      createdAt: resource.createdAt,
     };
     setSelectedResource(mappedResource);
   };
@@ -139,12 +157,11 @@ const ResourcesPage = () => {
   const confirmDelete = async () => {
     if (deleteResourceState) {
       try {
-
         await deleteResource({
-          variables:{
-            id:deleteResourceState.id
-          }
-        })
+          variables: {
+            id: deleteResourceState.id,
+          },
+        });
 
         setResources(resources.filter((r) => r.id !== deleteResourceState.id));
 
@@ -370,8 +387,8 @@ const ResourcesPage = () => {
               </button>
             </div>
             <p className="mb-6">
-              Are you sure you want to delete "{deleteResourceState.title}"? This
-              action cannot be undone.
+              Are you sure you want to delete "{deleteResourceState.title}"?
+              This action cannot be undone.
             </p>
             <div className="flex justify-end gap-4">
               <button
@@ -384,7 +401,7 @@ const ResourcesPage = () => {
                 onClick={confirmDelete}
                 className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition-colors"
               >
-                {mutationLoading?"Deleting...":"Yes"}
+                {mutationLoading ? "Deleting..." : "Yes"}
               </button>
             </div>
           </div>
