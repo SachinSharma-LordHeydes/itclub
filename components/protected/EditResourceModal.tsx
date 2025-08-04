@@ -107,7 +107,7 @@ const EditResourceModal = ({
 
   const handleFiles = (files: File[]) => {
     const validFiles = files.filter((file) => {
-      const validTypes = {
+      const validTypes: Record<Resource["type"], string[]> = {
         docs: [
           "application/pdf",
           "application/msword",
