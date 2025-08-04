@@ -12,7 +12,6 @@ import {
   Code,
   ExternalLink,
   FileText,
-  Filter,
   Github,
   Heart,
   Link,
@@ -152,7 +151,7 @@ const Projects = () => {
   }, [getFilteredProjectsByTab, searchTerm, filterTech]);
 
   const getTechColor = (tech: string) => {
-    const colors : { [key: string]: string } = {
+    const colors: { [key: string]: string } = {
       React: "bg-blue-100 text-blue-800 border-blue-200",
       "Vue.js": "bg-green-100 text-green-800 border-green-200",
       "Node.js": "bg-green-100 text-green-800 border-green-200",
@@ -372,21 +371,6 @@ const Projects = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          {/* <div className="flex items-center space-x-4">
-            <Filter className="h-5 w-5 text-gray-400" />
-            <select
-              value={filterTech}
-              onChange={(e) => setFilterTech(e.target.value)}
-              className="border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[180px] bg-white hover:border-gray-300 transition-colors"
-            >
-              <option value="all">All Technologies</option>
-              {allTechnologies.map((tech,index) => (
-                <option key={index} value={tech}>
-                  {tech}
-                </option>
-              ))}
-            </select>
-          </div> */}
         </div>
       </div>
 
