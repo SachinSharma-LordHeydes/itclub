@@ -1,5 +1,6 @@
-import { prisma } from '@/lib/db/prisma';
-import { auth } from '@clerk/nextjs/server';
+import { prisma } from "@/lib/db/prisma";
+import { getAuth } from "@clerk/nextjs/server";
+import { NextRequest } from "next/server";
 
 export interface GraphQLContext {
   prisma: typeof prisma;
@@ -11,10 +12,10 @@ export interface GraphQLContext {
   } | null;
 }
 
-export async function createContext(request: Request): Promise<GraphQLContext> {
+export async function createContext(request: NextRequest): Promise<GraphQLContext> {
   try {
-    const { userId } = await auth();
-    
+    const { userId } = await getAuth(request);
+
     let user = null;
     if (userId) {
       user = await prisma.user.findUnique({
@@ -33,7 +34,7 @@ export async function createContext(request: Request): Promise<GraphQLContext> {
       user,
     };
   } catch (error) {
-    console.error('Error creating GraphQL context:', error);
+    console.error("Error creating GraphQL context:", error);
     return {
       prisma,
       user: null,

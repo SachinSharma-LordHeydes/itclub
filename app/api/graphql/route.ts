@@ -17,9 +17,9 @@ const yoga = createYoga<{
       process.env.NODE_ENV === "production"
         ? [
             process.env.NEXT_PUBLIC_APP_URL ||
-              "https://itclub-oyvh.vercel.app"
+              "https://itclub-xi.vercel.app"
           ]
-        : ["https://itclub-oyvh.vercel.app"],
+        : ["https://itclub-xi.vercel.app"],
     credentials: true,
   },
 });
