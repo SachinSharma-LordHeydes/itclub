@@ -123,7 +123,7 @@ const Navbar: React.FC = () => {
                 </SignedOut>
 
                 <SignedIn>
-                  {userRoleLoading ? "" : <UserDropdown userRole={userRole} />}
+                  {userRoleLoading ? "" : <UserDropdown userRole={userRoleData?.getUser?.role} />}
                 </SignedIn>
               </header>
             </div>
