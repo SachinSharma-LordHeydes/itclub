@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
   let userRole;
 
   if (!userRoleLoading) {
-    userRole = userRoleData.getUser.role;
+    userRole = userRoleData?.getUser.role;
   }
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
