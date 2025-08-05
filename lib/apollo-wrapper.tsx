@@ -20,7 +20,7 @@ export default function ApolloProviderWrapper({
   const client = useMemo(() => {
     const httpLink = createHttpLink({
       // uri: "http://localhost:3000//api/graphql",
-      uri: `${process.env.NEXT_PUBLIC_RUN_DEV}/api/graphql`,
+      uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/graphql`,
     });
 
     const authLink = setContext(async (_, { headers }) => {
