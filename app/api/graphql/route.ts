@@ -17,8 +17,7 @@ const yoga = createYoga<{
       process.env.NODE_ENV === "production"
         ? [
             process.env.NEXT_PUBLIC_APP_URL ||
-              "https://itclub-oyvh.vercel.app" ||
-              "http://localhost:3000",
+              "https://itclub-oyvh.vercel.app"
           ]
         : ["https://itclub-oyvh.vercel.app"],
     credentials: true,
