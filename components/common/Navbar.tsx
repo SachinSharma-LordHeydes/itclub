@@ -16,11 +16,6 @@ const Navbar: React.FC = () => {
 
   console.log("user role", userRoleData);
 
-  let userRole;
-
-  if (!userRoleLoading) {
-    userRole = userRoleData?.getUser.role;
-  }
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navItems = [
@@ -77,7 +72,7 @@ const Navbar: React.FC = () => {
                 </SignedOut>
 
                 <SignedIn>
-                  {userRoleLoading ? "" : <UserDropdown userRole={userRole} />}
+                  {userRoleLoading ? "" : <UserDropdown userRole={userRoleData?.getUser?.role} />}
                   
                 </SignedIn>
               </header>
