@@ -25,6 +25,8 @@ export const userResolvers = {
       { limit, offset }: { limit?: number; offset?: number },
       ctx: GraphQLContext
     ) => {
+      const user = requireAuth(ctx);
+      if(!user)throw new Error("login required") 
       const userResponse = await prisma.user.findMany({
         take: limit || 10,
         skip: offset || 0,
