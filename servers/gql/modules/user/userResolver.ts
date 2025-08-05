@@ -25,7 +25,6 @@ export const userResolvers = {
       { limit, offset }: { limit?: number; offset?: number },
       ctx: GraphQLContext
     ) => {
-      const user = requireAuth(ctx);
       const userResponse = await prisma.user.findMany({
         take: limit || 10,
         skip: offset || 0,
