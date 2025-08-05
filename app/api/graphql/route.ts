@@ -20,7 +20,7 @@ const yoga = createYoga<{
               "https://itclub-oyvh.vercel.app" ||
               "http://localhost:3000",
           ]
-        : ["http://localhost:3000"],
+        : ["https://itclub-oyvh.vercel.app"],
     credentials: true,
   },
 });
