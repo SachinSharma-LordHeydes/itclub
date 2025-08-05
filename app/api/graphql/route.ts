@@ -1,7 +1,7 @@
-import { createYoga } from "graphql-yoga";
 import { createContext } from "@/servers/gql/context";
-import { schema } from "../../../servers/gql/index";
+import { createYoga } from "graphql-yoga";
 import type { NextRequest } from "next/server";
+import { schema } from "../../../servers/gql/index";
 
 const yoga = createYoga<{
   req: NextRequest;
@@ -15,7 +15,11 @@ const yoga = createYoga<{
   cors: {
     origin:
       process.env.NODE_ENV === "production"
-        ? [process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"]
+        ? [
+            process.env.NEXT_PUBLIC_APP_URL ||
+              "https://itclub-oyvh.vercel.app" ||
+              "http://localhost:3000",
+          ]
         : ["http://localhost:3000"],
     credentials: true,
   },
