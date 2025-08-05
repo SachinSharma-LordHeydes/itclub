@@ -1,12 +1,7 @@
 "use client";
 import { GET_USER_ROLE } from "@/client/user/userQueries";
 import { useQuery } from "@apollo/client";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Menu, Monitor, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,10 +11,8 @@ import { UserDropdown } from "../clerk/UserDropdown";
 const Navbar: React.FC = () => {
   const pathname = usePathname();
 
-  const {
-    data: userRoleData,
-    loading: userRoleLoading,
-  } = useQuery(GET_USER_ROLE);
+  const { data: userRoleData, loading: userRoleLoading } =
+    useQuery(GET_USER_ROLE);
 
   console.log("user role", userRoleData);
 
@@ -84,7 +77,8 @@ const Navbar: React.FC = () => {
                 </SignedOut>
 
                 <SignedIn>
-                  <UserDropdown userRole={userRole} />
+                  {userRoleLoading ? "" : <UserDropdown userRole={userRole} />}
+                  
                 </SignedIn>
               </header>
             </div>
@@ -134,7 +128,7 @@ const Navbar: React.FC = () => {
                 </SignedOut>
 
                 <SignedIn>
-                  <UserDropdown userRole={userRole} />
+                  {userRoleLoading ? "" : <UserDropdown userRole={userRole} />}
                 </SignedIn>
               </header>
             </div>
