@@ -6,7 +6,6 @@ import {
   SignedOut,
   SignInButton,
   SignUpButton,
-  useClerk,
 } from "@clerk/nextjs";
 import { Menu, Monitor, X } from "lucide-react";
 import Link from "next/link";
@@ -16,12 +15,10 @@ import { UserDropdown } from "../clerk/UserDropdown";
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
-  const { openUserProfile } = useClerk();
 
   const {
     data: userRoleData,
     loading: userRoleLoading,
-    error: userRoleError,
   } = useQuery(GET_USER_ROLE);
 
   console.log("user role", userRoleData);

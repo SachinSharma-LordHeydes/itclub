@@ -14,20 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-
-type ResourceData = {
-  resourceId: string;
-  title: string;
-  type: string;
-  category: string;
-  description: string;
-  resourceLink: string[];
-  imageLinks?: string[];
-  userName: string | null;
-  clerkId: string | null;
-  createdAt: string;
-};
+import { useCallback, useEffect, useState } from "react";
 
 const ViewResourcePage = () => {
   const { resourceId } = useParams();
@@ -43,7 +30,33 @@ const ViewResourcePage = () => {
 
   console.log("resource data-->", resourcesData);
 
+  // Handle closing the modal
+  const closeMediaModal = useCallback(() => {
+    setSelectedMediaIndex(null);
+  }, []);
+
   // Keyboard navigation for accessibility (moved to top level)
+  const goToNextMedia = useCallback(() => {
+    if (selectedMediaIndex !== null && resourcesData?.getResource?.resourceLink) {
+      setSelectedMediaIndex((prev) =>
+        prev !== null &&
+        prev < resourcesData.getResource.resourceLink.length - 1
+          ? prev + 1
+          : 0
+      );
+    }
+  }, [selectedMediaIndex, resourcesData]);
+
+  const goToPreviousMedia = useCallback(() => {
+    if (selectedMediaIndex !== null && resourcesData?.getResource?.resourceLink) {
+      setSelectedMediaIndex((prev) =>
+        prev !== null && prev > 0
+          ? prev - 1
+          : resourcesData.getResource.resourceLink.length - 1
+      );
+    }
+  }, [selectedMediaIndex, resourcesData]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedMediaIndex === null) return;
@@ -53,7 +66,7 @@ const ViewResourcePage = () => {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedMediaIndex]); // Dependency on selectedMediaIndex
+  }, [selectedMediaIndex, goToNextMedia, goToPreviousMedia, closeMediaModal]);
 
   if (resourcesLoading) {
     return <div className="p-6 text-center text-gray-600">Loading...</div>;
@@ -105,33 +118,7 @@ const ViewResourcePage = () => {
     setSelectedMediaIndex(index);
   };
 
-  // Handle closing the modal
-  const closeMediaModal = () => {
-    setSelectedMediaIndex(null);
-  };
 
-  // Navigate to the next media item
-  const goToNextMedia = () => {
-    if (selectedMediaIndex !== null && resourcesData.getResource.resourceLink) {
-      setSelectedMediaIndex((prev) =>
-        prev !== null &&
-        prev < resourcesData.getResource.resourceLink.length - 1
-          ? prev + 1
-          : 0
-      );
-    }
-  };
-
-  // Navigate to the previous media item
-  const goToPreviousMedia = () => {
-    if (selectedMediaIndex !== null && resourcesData.getResource.resourceLink) {
-      setSelectedMediaIndex((prev) =>
-        prev !== null && prev > 0
-          ? prev - 1
-          : resourcesData.getResource.resourceLink.length - 1
-      );
-    }
-  };
 
   // Check if the link is a video based on its extension or type
   const isVideoLink = (link: string) => {

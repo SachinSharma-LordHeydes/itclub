@@ -63,7 +63,7 @@ const ResourcesPage = () => {
 
   const [
     deleteResource,
-    { data: mutationData, error: mutationError, loading: mutationLoading },
+    { loading: mutationLoading },
   ] = useMutation(DELETE_RESOURCE);
 
   const router = useRouter();
@@ -387,7 +387,7 @@ const ResourcesPage = () => {
               </button>
             </div>
             <p className="mb-6">
-              Are you sure you want to delete "{deleteResourceState.title}"?
+              Are you sure you want to delete &quot;{deleteResourceState.title}&quot;?
               This action cannot be undone.
             </p>
             <div className="flex justify-end gap-4">

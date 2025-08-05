@@ -53,7 +53,7 @@ const EditResourceModal = ({
 
   const [
     updateResource,
-    { data: mutationData, error: mutationError, loading: mutationLoading },
+    { loading: mutationLoading, error: mutationError },
   ] = useMutation(UPDATE_RESOURCE);
 
   useEffect(() => {

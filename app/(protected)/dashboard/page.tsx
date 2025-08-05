@@ -36,7 +36,6 @@ const UserDashboard = () => {
   const {
     data: resourcesData,
     loading: resourcesLoading,
-    error: resourcesError,
   } = useQuery(GET_RESOURCES, {
     variables: { limit: 3, offset: 0 },
   });
@@ -55,7 +54,7 @@ const UserDashboard = () => {
           }`}
         </h1>
         <p className="text-gray-600">
-          Here's what's happening in your tech journey
+          Here&apos;s what&apos;s happening in your tech journey
         </p>
       </div>
 

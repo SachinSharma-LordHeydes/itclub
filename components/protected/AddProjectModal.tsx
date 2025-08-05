@@ -3,19 +3,28 @@
 import { FileText, Github, Link, Plus, X } from "lucide-react";
 import { useState } from "react";
 
+interface FormData {
+  title: string;
+  description: string;
+  githubLink?: string;
+  projectLink?: string;
+  tags: string[];
+}
+
+interface CustomEvent {
+  target: {
+    name: string;
+    value: string[];
+  };
+}
+
 interface Props {
   setShowAddModal: (val: boolean) => void;
   resetForm: () => void;
   handleSubmit: () => void;
-  formData: {
-    title: string;
-    description: string;
-    githubLink?: string;
-    projectLink?: string;
-    tags: string[];
-  };
+  formData: FormData;
   handleInputChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | CustomEvent
   ) => void;
 }
 
@@ -36,7 +45,7 @@ const AddProjectModal = ({
           name: "tags",
           value: [...formData.tags, trimmed],
         },
-      } as any); // Type casting due to custom event
+      } as CustomEvent);
       setTagInput("");
     }
   };
@@ -47,7 +56,7 @@ const AddProjectModal = ({
         name: "tags",
         value: formData.tags.filter((t) => t !== tag),
       },
-    } as any);
+    } as CustomEvent);
   };
 
   const handleClose = () => {

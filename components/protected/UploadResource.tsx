@@ -41,7 +41,7 @@ const UploadResource = () => {
     uploading: false,
   });
 
-  const [createResource, { loading, error: mutationError }] =
+  const [createResource, { loading }] =
     useMutation(CREATE_RESOURCE);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
@@ -112,7 +112,7 @@ const UploadResource = () => {
           ...results.map((result) => result.url),
         ],
       }));
-    } catch (err) {
+    } catch {
       setError("Failed to upload files to Cloudinary. Please try again.");
     } finally {
       setFormData((prev) => ({ ...prev, uploading: false }));
@@ -161,7 +161,7 @@ const UploadResource = () => {
           ...results.map((result) => result.url),
         ],
       }));
-    } catch (err) {
+    } catch {
       setError("Failed to upload files to Cloudinary. Please try again.");
     } finally {
       setFormData((prev) => ({ ...prev, uploading: false }));
@@ -240,8 +240,9 @@ const UploadResource = () => {
         uploadedUrls: [],
         uploading: false,
       });
-    } catch (err: any) {
-      setError(`Failed to create resource: ${err.message}`);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(`Failed to create resource: ${errorMessage}`);
     }
   };
 

@@ -23,6 +23,29 @@ import {
 } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 
+interface User {
+  clerkId: string;
+  first_name: string;
+  avatar: string;
+}
+
+interface Like {
+  user: User;
+}
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  githubLink: string;
+  liveLink?: string;
+  tags: string[];
+  likes: number;
+  likedBy: Like[];
+  user: User;
+  createdAt: string;
+}
+
 const Projects = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterTech, setFilterTech] = useState("all");
@@ -37,25 +60,20 @@ const Projects = () => {
     liveLink: "",
     tags: [] as string[],
   });
+
   const [currentTag, setCurrentTag] = useState("");
   const [showTagSuggestions, setShowTagSuggestions] = useState(false);
 
   const { userId } = useAuth();
 
-  const [
-    createProject,
-    { loading: mutationProjectLoading, error: mutationProjectError },
-  ] = useMutation(CREATE_PROJECT, {
-    refetchQueries: [{ query: GET_PROJECTS }],
-  });
-
-  const [
-    toggleProjectLikes,
+  const [createProject, { loading: mutationProjectLoading }] = useMutation(
+    CREATE_PROJECT,
     {
-      loading: mutationtoggleProjectLikesLoading,
-      error: mutationtoggleProjectLikesError,
-    },
-  ] = useMutation(TOGGLE_PRODUCT_LIKES);
+      refetchQueries: [{ query: GET_PROJECTS }],
+    }
+  );
+
+  const [toggleProjectLikes, {}] = useMutation(TOGGLE_PRODUCT_LIKES);
 
   const {
     data: projectData,
@@ -80,16 +98,16 @@ const Projects = () => {
   useEffect(() => {
     if (projectData?.getProjects && userId) {
       const liked = projectData.getProjects
-        .filter((project: any) =>
-          project.likedBy?.some((like: any) => like.user?.clerkId === userId)
+        .filter((project: Project) =>
+          project.likedBy?.some((like: Like) => like.user?.clerkId === userId)
         )
-        .map((project: any) => project.id);
+        .map((project: Project) => project.id);
       setLikedProjects(liked);
     }
   }, [projectData, userId]);
 
   // Use fetched projects instead of hardcoded ones
-  const projects = projectData?.getProjects || [];
+  const projects = useMemo(() => projectData?.getProjects || [], [projectData]);
 
   // Fixed tabs with proper counts
   const tabs = useMemo(
@@ -99,22 +117,14 @@ const Projects = () => {
         id: "my",
         label: "My Projects",
         count: projects.filter(
-          (project: any) => project.user.clerkId === userId
+          (project: Project) => project.user.clerkId === userId
         ).length,
       },
       { id: "liked", label: "Liked", count: likedProjects.length },
       { id: "add", label: "Add Project", icon: Plus, isAction: true },
     ],
-    [projects.length, likedProjects.length]
+    [projects, likedProjects.length, userId]
   );
-
-  // Get all unique technologies
-  const allTechnologies = useMemo(
-    () => [...new Set(projects.flatMap((p: any) => p.tags))].sort(),
-    [projects]
-  );
-
-  // setLikedProjects(projects.filter((project:any)=>project.likes>0))
 
   console.log("projects-->", projects);
 
@@ -122,8 +132,12 @@ const Projects = () => {
   const getFilteredProjectsByTab = useMemo(() => {
     switch (activeTab) {
       case "liked":
-        return projects.filter((project: any) =>
+        return projects.filter((project: Project) =>
           likedProjects.includes(project.id)
+        );
+      case "My Projects":
+        return projects.filter(
+          (project: Project) => project.user.clerkId === userId
         );
       default:
         return projects;
@@ -132,7 +146,7 @@ const Projects = () => {
 
   // Apply search and technology filters
   const filteredProjects = useMemo(() => {
-    return getFilteredProjectsByTab.filter((project: any) => {
+    return getFilteredProjectsByTab.filter((project: Project) => {
       const matchesSearch =
         project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -185,11 +199,11 @@ const Projects = () => {
               },
               likedBy(existingLikes = []) {
                 const isLiked = existingLikes.some(
-                  (like: any) => like.user?.clerkId === userId
+                  (like: Like) => like.user?.clerkId === userId
                 );
                 if (isLiked) {
                   return existingLikes.filter(
-                    (like: any) => like.user?.clerkId !== userId
+                    (like: Like) => like.user?.clerkId !== userId
                   );
                 } else {
                   return [
@@ -206,7 +220,7 @@ const Projects = () => {
         },
       });
       console.log("Like toggled successfully");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Toggle like error", error);
       setLikedProjects(previousLikedProjects);
     }
@@ -418,7 +432,7 @@ const Projects = () => {
       {/* Projects Grid */}
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {filteredProjects.map((project: any) => {
+        {filteredProjects.map((project: Project) => {
           if (!project.likedBy) {
             console.log(`Project ${project.id} has no likedBy field`);
           }
@@ -436,7 +450,7 @@ const Projects = () => {
                     onClick={(e) => toggleLike(e, project.id)}
                     className={`flex items-center space-x-1 transition-all duration-200 hover:scale-110 ${
                       project.likedBy?.some(
-                        (like: any) => like.user?.clerkId === userId
+                        (like: Like) => like.user?.clerkId === userId
                       )
                         ? "text-red-500"
                         : "text-gray-400 hover:text-red-500"
@@ -445,7 +459,7 @@ const Projects = () => {
                     <Heart
                       className={`h-5 w-5 ${
                         project.likedBy?.some(
-                          (like: any) => like.user?.clerkId === userId
+                          (like: Like) => like.user?.clerkId === userId
                         )
                           ? "fill-red-500 text-red-500"
                           : ""
