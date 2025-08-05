@@ -9,7 +9,7 @@ const yoga = createYoga<{
   schema,
   graphqlEndpoint: "/api/graphql",
   fetchAPI: { Request, Response },
-  context: async ({ request }) => {
+  context: async ({ request }:{request:NextRequest}) => {
     return await createContext(request);
   },
   cors: {
