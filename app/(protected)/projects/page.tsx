@@ -135,7 +135,7 @@ const Projects = () => {
         return projects.filter((project: Project) =>
           likedProjects.includes(project.id)
         );
-      case "My Projects":
+      case "my":
         return projects.filter(
           (project: Project) => project.user.clerkId === userId
         );
